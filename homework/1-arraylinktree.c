@@ -65,53 +65,6 @@ void ArrayOrders(int *tree)
     printf("\n");
 }
 
-// void PlaceNode(TreeNode *node, int direction, int data)
-// {
-//     // 먼저 노드 만들어 두기
-//     TreeNode *newNode = (TreeNode *)malloc(sizeof(TreeNode));
-//     newNode->data = data;
-//     newNode->left = NULL;
-//     newNode->right = NULL;
-//     // 왼쪽일 경우
-//     if (direction == 0)
-//     {
-//         if (node->left == NULL)
-//         {
-//             node->left = newNode; // 노드 왼쪽이 비었으면 왼쪽에 새 노드 연결
-//         }
-//         else
-//         {
-//             if (node->left->left == NULL)
-//             {
-//                 PlaceNode(node->left, direction, data); // 노드 왼쪽이 있고 왼쪽왼쪾이 비었으면 노드의 왼쪽 노드로 다시 함수 호출
-//             }
-//             else if(node->right->left == NULL)
-//             { // 노드 왼쪽이 있고 왼쪽왼쪽도 있으면 노드 오른쪽으로 가서 왼쪽 검사
-//                 PlaceNode(node->right, direction, data);
-//             }
-//         }
-//     }
-//     // 오른쪽일 경우
-//     if (direction == 1)
-//     {
-//         if (node->right == NULL)
-//         {
-//             node->right = newNode; // 노드 오른쪽이 비었으면 오른쪽에 새 노드 연결
-//         }
-//         else
-//         {
-//             if (node->left->right == NULL)
-//             {
-//                 PlaceNode(node->left, direction, data);
-//             }
-//             else
-//             {
-//                 PlaceNode(node->right, direction, data);
-//             }
-//         }
-//     }
-// }
-
 void PlaceNode(TreeNode *node, int direction, int data)
 {
     // 먼저 노드 만들어 두기
@@ -135,19 +88,6 @@ void GenerateLinkTree(TreeNode *root)
 {
     int List[] = {2, 9, 3, 5, 10, 13, 4, 6, 7, 8, 11, 12, 14, 15};
     int direction = 0;
-
-    // for (int j = 0; j < 14; j++)
-    // {
-    //     PlaceNode(root, direction, List[j]);
-    //     if (direction == 0)
-    //     {
-    //         direction = direction + 1;
-    //     }
-    //     else if (direction == 1)
-    //     {
-    //         direction = direction - 1;
-    //     }
-    // }
 
     PlaceNode(root, 0, List[0]);
     PlaceNode(root, 1, List[1]);
