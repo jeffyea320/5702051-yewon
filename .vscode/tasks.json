@@ -3,25 +3,25 @@
   "tasks": [
     {
       "type": "cppbuild",
-      "label": "C/C++: clang 활성 파일 빌드",
-      "command": "/usr/bin/clang",
+      "label": "C/C++: gcc 활성 파일 빌드",
+      "command": "/usr/bin/gcc",
       "args": [
         "-fcolor-diagnostics",
         "-fansi-escape-codes",
         "-g",
-        "${file}",
+        "${fileDirname}/*.c",  // 모든 C 파일을 컴파일
         "-o",
-        "${fileDirname}/${fileBasenameNoExtension}"
+        "${workspaceFolderBasename}.exe"
       ],
       "options": {
-        "cwd": "${fileDirname}"
+        "cwd": "${fileDirname}"  // 현재 파일 디렉토리에서 빌드
       },
       "problemMatcher": ["$gcc"],
       "group": {
-        "kind": "test",
+        "kind": "build",
         "isDefault": true
       },
-      "detail": "컴파일러: /usr/bin/clang"
+      "detail": "컴파일러: /usr/bin/gcc"
     }
   ]
 }
