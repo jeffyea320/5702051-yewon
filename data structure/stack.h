@@ -1,5 +1,6 @@
 #pragma once
 #include "itrTreeTrv.h"
+
 typedef TreeNode *element;
 typedef struct StackNode
 {
