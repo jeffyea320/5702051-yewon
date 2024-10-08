@@ -45,7 +45,7 @@ TreeNode *GenerateBinaryTree(int inputData[])
 {
     TreeNode *root = NULL;
 
-    for (int i = 0; i < 14; i++)
+    for (int i = 0; i < 15; i++)
     {
         root = insert_node(root, inputData[i]);
     }
@@ -95,25 +95,21 @@ void CreateThreads(ThreadTree *root, ThreadTree **prev)
     if (root == NULL)
         return;
 
-    // Left subtree
     CreateThreads(root->left, prev);
 
-    // Process current node
     if (root->left == NULL)
     {
-        root->ltag = 1;     // Mark as thread
-        root->left = *prev; // Set left thread to previous node
+        root->ltag = 1;
+        root->left = *prev;
     }
     if (*prev != NULL && (*prev)->right == NULL)
     {
-        (*prev)->rtag = 1;     // Mark as thread
-        (*prev)->right = root; // Set right thread to current node
+        (*prev)->rtag = 1;
+        (*prev)->right = root;
     }
 
-    // Update prev pointer to current node
     *prev = root;
 
-    // Right subtree
     CreateThreads(root->right, prev);
 }
 
@@ -125,7 +121,6 @@ ThreadTree *GenerateThreadTree(int inputData[])
         root = insert_thread_node(root, inputData[i]);
     }
 
-    // Now create threads in the tree
     ThreadTree *prev = NULL;
     CreateThreads(root, &prev);
 
@@ -137,29 +132,26 @@ void ThreadTreeInOrder(ThreadTree *root)
     if (root == NULL)
         return;
 
-    // Find the leftmost node
-    ThreadTree *cur = root;
-    while (cur->ltag == 0 && cur->left != NULL)
+    ThreadTree *temp = root;
+    while (temp->ltag == 0 && temp->left != NULL)
     {
-        cur = cur->left;
+        temp = temp->left;
     }
 
-    while (cur != NULL)
+    while (temp != NULL)
     {
-        printf("%d ", cur->data);
+        printf("%d ", temp->data);
 
-        // If right pointer is a thread, follow the thread
-        if (cur->rtag == 1)
+        if (temp->rtag == 1)
         {
-            cur = cur->right;
+            temp = temp->right;
         }
         else
         {
-            // Otherwise, go to the leftmost node in the right subtree
-            cur = cur->right;
-            while (cur != NULL && cur->ltag == 0 && cur->left != NULL)
+            temp = temp->right;
+            while (temp != NULL && temp->ltag == 0 && temp->left != NULL)
             {
-                cur = cur->left;
+                temp = temp->left;
             }
         }
     }
@@ -167,7 +159,7 @@ void ThreadTreeInOrder(ThreadTree *root)
 
 int main()
 {
-    int inputData[] = {4, 1, 9, 13, 15, 3, 6, 14, 7, 10, 12, 2, 5, 8, 7};
+    int inputData[] = {4, 1, 9, 13, 15, 3, 6, 14, 7, 10, 12, 2, 5, 8, 11};
 
     TreeNode *root = GenerateBinaryTree(inputData);
     printf("Binary tree inrder: ");
@@ -181,5 +173,6 @@ int main()
 
     free(root);
     free(troot);
+
     return 0;
 }
