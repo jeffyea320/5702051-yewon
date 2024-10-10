@@ -33,7 +33,7 @@ void inorder_traversal(TreeNode *root)
     if (root != NULL)
     {
         inorder_traversal(root->left);
-        printf("[%d]", root->data);
+        printf("[%2d]", root->data);
         inorder_traversal(root->right);
     }
 }

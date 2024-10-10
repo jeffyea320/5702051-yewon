@@ -27,4 +27,10 @@ int main()
         printf("Search Success: %d\n", temp->data);
     else
         printf("Search Fail: 9");
+
+    bst = delete_node(bst, 2);
+
+    printf("inorder \n");
+    inorder_traversal(bst);
+    printf("\n");
 }
