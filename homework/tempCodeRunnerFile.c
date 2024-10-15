@@ -1,3 +1,4 @@
+
 void InsertMaxHeapTree(HeapType *h, element item)
 {
     int i;
@@ -14,3 +15,8 @@ void InsertMaxHeapTree(HeapType *h, element item)
     }
     h->heap[i] = item; // 새로운 노드를 삽입
 }
+
+print_codes(e.ptree, codes, top);
+    destroy_tree(e.ptree);
+    free(heap);
+
