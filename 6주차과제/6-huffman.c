@@ -28,13 +28,13 @@ HeapType *create()
 {
     return (HeapType *)malloc(sizeof(HeapType));
 }
+
 // 초기화 함수
 void init(HeapType *h)
 {
     h->heap_size = 0;
 }
 // 현재 요소의 개수가 heap_size인 히프 h에 item을 삽입한다.
-
 // 삽입 함수
 void insert_min_heap(HeapType *h, element item)
 {
@@ -178,28 +178,6 @@ void GenerateHuffmanCodes(char characters[], int frequencies[], int size)
     destroy_tree(e.ptree);
     free(heap);
 }
-
-// void GenerateHuffmanCodes(char characters[], int frequencies[], int size)
-// {
-//     Node *root = buildHuffmanTree(characters, frequencies, size);
-//     int arr[size], top = 0;
-//     printCodes(root, arr, top);
-// }
-
-// int main()
-// {
-//     char characters[] = {'a',
-//                          'e',
-//                          'i',
-//                          'o',
-//                          'u',
-//                          's',
-//                          't'};
-//     int frequencies[] = {10, 15, 12, 3, 4, 13, 1};
-//     int size = sizeof(characters) / sizeof(characters[0]);
-//     GenerateHuffmanCodes(characters, frequencies, size);
-//     return 0;
-// }
 
 int main(void)
 {

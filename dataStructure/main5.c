@@ -21,4 +21,10 @@ int main()
     insert_heap(myheap, (element){11});
 
     display_heap(myheap);
+
+    delete_heap(myheap);
+    delete_heap(myheap);
+    delete_heap(myheap);
+
+    display_heap(myheap);
 }
