@@ -22,6 +22,7 @@ typedef struct
     int size;
 } MinHeap;
 
+// 그래프 초기화 함수
 void graph_init(GraphType *g)
 {
     g->n = 0;
@@ -34,6 +35,7 @@ void graph_init(GraphType *g)
     }
 }
 
+// 정점 추가 함수
 void insert_edge(GraphType *g, int start, int end, int w)
 {
     g->edges[g->n].start = start;
