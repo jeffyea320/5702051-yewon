@@ -1,3 +1,0 @@
-
-![](./shellsort.png)
-
