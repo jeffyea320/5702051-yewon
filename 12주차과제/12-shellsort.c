@@ -41,54 +41,105 @@ void doShellSort(int *array, int divider, int *comparisonCount, int *moveCount)
 {
     int temp, j;
     int n = ARRAY_SIZE;
-    *comparisonCount = 0;
-    *moveCount = 0;
 
-    // gap을 50에서 시작하여 divider로 나누며 쉘 정렬 수행
-    for (int gap = 50; gap > 0; gap /= divider)
+    int totalComparisons = 0;
+    int totalMoves = 0;
+
+    for (int run = 0; run < 20; run++) // 20번 반복 실행
     {
-        printf("Sorting with gap = %d:\n", gap);
-        for (int i = gap; i < n; i++)
+        // 배열을 랜덤하게 초기화
+        generateRandomNumbers(array);
+
+        *comparisonCount = 0;
+        *moveCount = 0;
+
+        // gap을 50에서 시작하여 divider로 나누며 쉘 정렬 수행
+        for (int gap = 50; gap > 0; gap /= divider)
         {
-            temp = array[i];
-            (*moveCount)++;
-            for (j = i; j >= gap && array[j - gap] > temp; j -= gap)
+            if (run == 0) // 첫 번째 실행에서만 정렬 과정 출력
             {
-                array[j] = array[j - gap];
-                (*comparisonCount)++;
+                printf("Sorting with gap = %d:\n", gap);
+            }
+
+            for (int i = gap; i < n; i++)
+            {
+                temp = array[i];
+                (*moveCount)++;
+                for (j = i; j >= gap && array[j - gap] > temp; j -= gap)
+                {
+                    array[j] = array[j - gap];
+                    (*comparisonCount)++;
+                    (*moveCount)++;
+                }
+                array[j] = temp;
                 (*moveCount)++;
             }
-            array[j] = temp;
-            (*moveCount)++;
+
+            if (run == 0) // 첫 번째 실행에서만 배열 일부 출력
+            {
+                printArrayPartial(array);
+            }
         }
-        printArrayPartial(array);
+
+        totalComparisons += *comparisonCount;
+        totalMoves += *moveCount;
+
+        if (run == 0) // 첫 번째 실행에서 정렬된 배열 출력
+        {
+            printf("Sorted shellArray (gap = %d):\n", divider);
+            printArrayFull(array);
+        }
     }
-    printf("Sorted shellArray (gap = %d):\n", divider);
-    printArrayFull(array); // 정렬된 배열 전체 출력
+
+    // 평균 계산 및 출력
+    *comparisonCount = totalComparisons / 20;
+    *moveCount = totalMoves / 20;
 }
 
 // 삽입 정렬 함수: 비교 및 이동 횟수 계산
 void doInsertionSort(int *array, int *comparisonCount, int *moveCount)
 {
     int temp, j;
-    *comparisonCount = 0;
-    *moveCount = 0;
 
-    for (int i = 1; i < ARRAY_SIZE; i++)
+    int totalComparisons = 0;
+    int totalMoves = 0;
+
+    for (int run = 0; run < 20; run++) // 20번 반복 실행
     {
-        temp = array[i];
-        (*moveCount)++;
-        for (j = i - 1; j >= 0 && array[j] > temp; j--)
+        // 배열을 랜덤하게 초기화
+        generateRandomNumbers(array);
+
+        *comparisonCount = 0;
+        *moveCount = 0;
+
+        // 삽입 정렬 수행
+        for (int i = 1; i < ARRAY_SIZE; i++)
         {
-            array[j + 1] = array[j];
-            (*comparisonCount)++;
+            temp = array[i];
+            (*moveCount)++;
+            for (j = i - 1; j >= 0 && array[j] > temp; j--)
+            {
+                array[j + 1] = array[j];
+                (*comparisonCount)++;
+                (*moveCount)++;
+            }
+            array[j + 1] = temp;
             (*moveCount)++;
         }
-        array[j + 1] = temp;
-        (*moveCount)++;
+
+        totalComparisons += *comparisonCount;
+        totalMoves += *moveCount;
+
+        if (run == 0) // 첫 번째 실행에서만 기존 출력 수행
+        {
+            printf("Sorted insertionArray:\n");
+            printArrayFull(array); // 정렬된 배열 전체 출력
+        }
     }
-    printf("Sorted insertionArray:\n");
-    printArrayFull(array); // 정렬된 배열 전체 출력
+
+    // 평균 계산 및 출력
+    *comparisonCount = totalComparisons / 20;
+    *moveCount = totalMoves / 20;
 }
 
 int main()
@@ -104,16 +155,10 @@ int main()
     doShellSort(array, 2, &comparisonCount, &moveCount);
     printf("\nShell Sort (n/2) - Comparisons: %d, Moves: %d\n\n", comparisonCount, moveCount);
 
-    // 랜덤 배열 재생성
-    generateRandomNumbers(array);
-
     // Shell Sort (n/3)
     printf("Shell Sort (n/3):\n");
     doShellSort(array, 3, &comparisonCount, &moveCount);
     printf("\nShell Sort (n/3) - Comparisons: %d, Moves: %d\n\n", comparisonCount, moveCount);
-
-    // 랜덤 배열 재생성
-    generateRandomNumbers(array);
 
     // Insertion Sort
     printf("Insertion Sort:\n");
