@@ -1,11 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+
 #define SIZE 1000
 
-int comparisonCount = 0;
-
-// 배열 생성 함수
 void generateRandomArray(int array[])
 {
     for (int i = 0; i < SIZE; i++)
@@ -14,27 +12,26 @@ void generateRandomArray(int array[])
     }
 }
 
-// 배열 출력 함수
+// 배열의 처음 20개와 마지막 20개의 원소를 출력
 void printArray(int *array)
 {
     printf("Array Sorting Result:\n");
-    for (int i = 0; i < 20; i++) // 첫 20개 출력
+    for (int i = 0; i < 20; i++)
         printf("%4d ", array[i]);
     printf("\n");
-    for (int i = SIZE - 20; i < SIZE; i++) // 마지막 20개 출력
+    for (int i = SIZE - 20; i < SIZE; i++)
         printf("%4d ", array[i]);
     printf("\n\n");
 }
 
-// Quick Sort의 분할 과정
+// Quick Sort partition
 int partition(int array[], int low, int high)
 {
-    int pivot = array[high];
+    int pivot = array[high]; // 마지막 원소를 피벗으로 선택
     int i = low - 1;
 
     for (int j = low; j < high; j++)
     {
-        comparisonCount++;
         if (array[j] <= pivot)
         {
             i++;
@@ -51,7 +48,7 @@ int partition(int array[], int low, int high)
     return i + 1;
 }
 
-// Quick Sort 재귀 구현
+// Quick Sort
 void QuickSort(int array[], int low, int high)
 {
     if (low < high)
@@ -62,82 +59,88 @@ void QuickSort(int array[], int low, int high)
     }
 }
 
-// Binary Search 구현 및 비교 횟수 계산
-int binarySearch(int array[], int size, int target)
-{
-    int low = 0, high = size - 1, comparisons = 0;
-
-    while (low <= high)
-    {
-        comparisons++;
-        int mid = low + (high - low) / 2;
-
-        if (array[mid] == target)
-            return comparisons;
-
-        if (array[mid] < target)
-            low = mid + 1;
-        else
-            high = mid - 1;
-    }
-    return comparisons; // 실패한 경우에도 비교 횟수 반환
-}
-
-// Interpolation Search 구현 및 비교 횟수 계산
-int interpolationSearch(int array[], int size, int target)
-{
-    int low = 0, high = size - 1, comparisons = 0;
-
-    while (low <= high && target >= array[low] && target <= array[high])
-    {
-        comparisons++;
-
-        if (low == high)
-        {
-            if (array[low] == target)
-                return comparisons;
-            break;
-        }
-
-        int pos = low + ((double)(high - low) / (array[high] - array[low]) * (target - array[low]));
-
-        if (array[pos] == target)
-            return comparisons;
-
-        if (array[pos] < target)
-            low = pos + 1;
-        else
-            high = pos - 1;
-    }
-    return comparisons; // 실패한 경우에도 비교 횟수 반환
-}
-
-// Binary Search 평균 비교 횟수 계산
-double getAverageBinarySearchCompareCount(int array[])
+double getAverageBinarySearchCompareCount(int *array)
 {
     int totalComparisons = 0;
 
     for (int i = 0; i < 1000; i++)
     {
-        int target = array[rand() % SIZE]; // 배열 내 랜덤 값 선택
-        totalComparisons += binarySearch(array, SIZE, target);
+        int left = 0, right = SIZE - 1;
+        int randomIndex = rand() % SIZE;
+        int target = array[randomIndex];
+        int comparisons = 0;
+
+        while (left <= right)
+        {
+
+            int mid = (left + right) / 2;
+
+            if (array[mid] == target)
+            {
+                comparisons++;
+                break;
+            }
+            else if (array[mid] < target)
+            {
+                comparisons++;
+                left = mid + 1;
+            }
+            else
+            {
+                comparisons++;
+                right = mid - 1;
+            }
+        }
+        totalComparisons += comparisons;
     }
 
     return (double)totalComparisons / 1000;
 }
 
-// Interpolation Search 평균 비교 횟수 계산
 double getAverageInterpolationSearchComparecount(int array[])
 {
     int totalComparisons = 0;
 
     for (int i = 0; i < 1000; i++)
     {
-        int target = array[rand() % SIZE]; // 배열 내 랜덤 값 선택
-        totalComparisons += interpolationSearch(array, SIZE, target);
+        int target = array[rand() % SIZE];
+        int low = 0, high = SIZE - 1, comparisons = 0;
+
+        // 보간 탐색
+        while (low <= high && target >= array[low] && target <= array[high])
+        {
+            comparisons++;
+
+            if (low == high)
+            {
+                comparisons++;
+                if (array[low] == target)
+                    break;
+                break;
+            }
+
+            // 보간 탐색의 위치 계산
+            int pos = low + ((double)(high - low) / (array[high] - array[low]) * (target - array[low]));
+
+            comparisons++;
+            if (array[pos] == target)
+                break;
+
+            comparisons++;
+            if (array[pos] < target)
+            {
+                low = pos + 1;
+            }
+            else
+            {
+                high = pos - 1;
+            }
+        }
+
+        totalComparisons += comparisons; // 비교 횟수 누적
     }
 
-    return (double)totalComparisons / 1000;
+    return (double)totalComparisons / 1000; // 평균 비교 횟수 계산
 }
 
 // 메인 함수
@@ -150,7 +153,7 @@ int main(int argc, char *argv[])
     QuickSort(array, 0, SIZE - 1);
 
     printArray(array);
-    printf("Average Compare Count of Binary Search: %.2f\n", getAverageBinarySearchCompareCount(array));
-    printf("Average Compare Count of Interpolation Search: %.2f\n", getAverageInterpolationSearchComparecount(array));
+    printf("Average Compare Count of Binary Search: %.2f\n", getAverageBinarySearchCompareCount(array));               // 이진 탐색 평균 비교 횟수 출력
+    printf("Average Compare Count of Interpolation Search: %.2f\n", getAverageInterpolationSearchComparecount(array)); // 보간 탐색 평균 비교 횟수 출력
     return 0;
 }
