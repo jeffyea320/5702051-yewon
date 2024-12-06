@@ -1,0 +1,1 @@
+![](compareSearches.png)
