@@ -4,7 +4,6 @@
 #include <time.h>
 
 #define SIZE 1000
-#define SWAP(x, y, t) ((t) = (x), (x) = (y), (y) = (t))
 
 int compareCount = 0;
 
@@ -16,6 +15,17 @@ void generateRandomArray(int *array)
     {
         array[i] = rand() % 1000;
     }
+}
+
+void printArray(int *array)
+{
+    printf("Array Sorting Result:\n");
+    for (int i = 0; i < 20; i++)
+        printf("%3d ", array[i]);
+    printf("\n");
+    for (int i = SIZE - 20; i < SIZE; i++)
+        printf("%3d ", array[i]);
+    printf("\n");
 }
 
 double getAverageLinearSearchCompareCount(int *array)
@@ -42,56 +52,50 @@ double getAverageLinearSearchCompareCount(int *array)
     return (double)totalComparisons / 100;
 }
 
-int partition(int list[], int left, int right)
+// Quick Sort의 분할 과정
+int partition(int array[], int low, int high)
 {
-    int pivot, temp;
-    int low, high;
+    int pivot = array[high]; // 마지막 요소를 피벗으로 선택
+    int i = low - 1;         // 피벗보다 작은 값의 마지막 인덱스
 
-    low = left;
-    high = right + 1;
-    pivot = list[left];
-
-    while (1) // 무한 루프, 조건을 내부에서 제어
+    for (int j = low; j < high; j++)
     {
-
-        if (low <= right && list[low] < pivot)
+        if (array[j] <= pivot)
         {
-            low++;
-            compareCount++;
-        }
-        else if (high >= left && list[high] > pivot)
-        {
-            high--;
-            compareCount++;
-        }
-        else if (low < high)
-        {
-            SWAP(list[low], list[high], temp);
-        }
-        else
-        {
-            break; // low >= high가 되면 루프 종료
+            compareCount++; // 비교 횟수 증가
+            i++;
+            // 값 교환
+            int temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
         }
     }
 
-    SWAP(list[left], list[high], temp);
-    return high; // 피벗 위치 반환
+    // 피벗을 제자리에 놓음
+    int temp = array[i + 1];
+    array[i + 1] = array[high];
+    array[high] = temp;
+
+    return i + 1; // 피벗의 최종 위치 반환
 }
 
-void quick_sort(int list[], int left, int right)
+// Quick Sort 재귀 구현
+void doQuickSort(int array[], int low, int high)
 {
-    if (left < right)
+    if (low < high)
     {
-        int q = partition(list, left, right);
-        quick_sort(list, left, q - 1);
-        quick_sort(list, q + 1, right);
+        int pi = partition(array, low, high); // 분할 수행 및 피벗 위치 반환
+
+        // 재귀적으로 왼쪽과 오른쪽 부분 정렬
+        doQuickSort(array, low, pi - 1);
+        doQuickSort(array, pi + 1, high);
     }
 }
 
 void getQuickSortCompareCount(int *array)
 {
     compareCount = 0; // 비교 횟수 초기화
-    quick_sort(array, 0, SIZE - 1);
+    doQuickSort(array, 0, SIZE - 1);
 }
 
 double getAverageBinarySearchCompareCount(int *array)
@@ -141,6 +145,6 @@ int main(int argc, char *argv[])
     printf("Quick Sort Compare Count: %d\n", compareCount);
 
     printf("Average Binary Search Compare Count: %.2f\n\n", getAverageBinarySearchCompareCount(array));
-    // printArray(array);
+    printArray(array);
     return 0;
 }
